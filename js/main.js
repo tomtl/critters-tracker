@@ -12,22 +12,21 @@ require([
     var view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [-71.055185, 42.3591112], // longitude, latitude
-        zoom: 13
+        center: [-71.627158, 42.293983], // longitude, latitude
+        zoom: 15
     });
 
     // Places feature layer
-    var placesLayer = new FeatureLayer({
+    var crittersLayer = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Critters/FeatureServer"
     });
 
-    map.add(placesLayer);
+    map.add(crittersLayer);
 
     view.when(function(){
-
         // editor
         var editor = new Editor({
-            layer: placesLayer,
+            layer: crittersLayer,
             view: view
         });
 
