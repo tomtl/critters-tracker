@@ -1,3 +1,3 @@
-## Places Tracker
+## Critters Tracker
 
-A quick web map app for keeping track of places you want to visit. Created using ArcGIS API for JavaScript.
+A web map app for tracking wildlife sigtings. Created using ArcGIS API for JavaScript.

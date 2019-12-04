@@ -18,7 +18,7 @@ require([
 
     // Places feature layer
     var placesLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Places/FeatureServer/0"
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Critters/FeatureServer"
     });
 
     map.add(placesLayer);
