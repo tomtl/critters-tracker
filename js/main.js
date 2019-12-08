@@ -18,7 +18,8 @@ require([
         let editFeature, highlight;
 
         const featureLayer = new FeatureLayer({
-          url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Critters/FeatureServer",
+          url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Critters_tracker_map/FeatureServer/0",
+
           outFields: ["*"],
           popupEnabled: false,
           id: "reportsLayer"
@@ -45,6 +46,10 @@ require([
             {
               name: "critter_type",
               label: "Choose an animal"
+            },
+            {
+              name: "time",
+              label: "Date and time seen"
             },
             {
               name: "comments",
@@ -179,6 +184,14 @@ require([
             ) {
               view.hitTest(event).then(function(response) {
                 // If a user clicks on an incident feature, select the feature.
+
+                console.log("CLICKED RESPONSE: ", response);
+                console.log("RESULTS0 LAYER ID: ", response.results[0].graphic.layer.id)
+                console.log("RESULTS0 ATTRIBUTES: ", response.results[0].graphic.attributes)
+                console.log("RESULTS0 objectId: ", response.results[0].graphic.attributes.OBJECTID)
+                console.log("RESULTS0 FeatureLayer: ", response.results[0].graphic.attributes[featureLayer])
+                console.log("RESULTS0 OBJECTID: ", response.results[0].graphic.attributes[featureLayer.objectId])
+
                 if (response.results.length === 0) {
                   toggleEditingDivs("block", "none");
                 } else if (
@@ -189,9 +202,10 @@ require([
                     toggleEditingDivs("none", "block");
                   }
                   selectFeature(
-                    response.results[0].graphic.attributes[
-                      featureLayer.objectIdField
-                    ]
+                    response.results[0].graphic.attributes.OBJECTID
+                    // response.results[0].graphic.attributes[
+                    //   featureLayer.objectId
+                    // ]
                   );
                 }
               });
