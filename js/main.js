@@ -184,15 +184,14 @@ require([
             ) {
               view.hitTest(event).then(function(response) {
                 // If a user clicks on an incident feature, select the feature.
-
-                console.log("CLICKED RESPONSE: ", response);
-                console.log("RESULTS0 LAYER ID: ", response.results[0].graphic.layer.id)
-                console.log("RESULTS0 ATTRIBUTES: ", response.results[0].graphic.attributes)
-                console.log("RESULTS0 objectId: ", response.results[0].graphic.attributes.OBJECTID)
-                console.log("RESULTS0 FeatureLayer: ", response.results[0].graphic.attributes[featureLayer])
-                console.log("RESULTS0 OBJECTID: ", response.results[0].graphic.attributes[featureLayer.objectId])
+                console.log("Clicked feature objectId: ", response.results[0].graphic.attributes.OBJECTID)
 
                 if (response.results.length === 0) {
+                  toggleEditingDivs("block", "none");
+                } else if (
+                  response.results[0].graphic &&
+                  response.results[0].graphic.layer.id != "reportsLayer"
+                ) {
                   toggleEditingDivs("block", "none");
                 } else if (
                   response.results[0].graphic &&
@@ -203,9 +202,6 @@ require([
                   }
                   selectFeature(
                     response.results[0].graphic.attributes.OBJECTID
-                    // response.results[0].graphic.attributes[
-                    //   featureLayer.objectId
-                    // ]
                   );
                 }
               });
