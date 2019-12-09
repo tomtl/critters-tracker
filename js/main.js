@@ -48,11 +48,6 @@ require([
           view: view
         });
 
-        // Add the locate widget to the top left corner of the view
-        view.ui.add(locateBtn, {
-          position: "top-left"
-        });
-
         // Basemap gallery
         var basemapGallery = new BasemapGallery({
           view: view,
@@ -90,7 +85,12 @@ require([
 
         // Add the search widget to the top right corner of the view
         view.ui.add(searchWidget, {
-          position: "bottom-left"
+          position: "top-right"
+        });
+
+        // Add the locate widget to the top right corner of the view under the search
+        view.ui.add(locateBtn, {
+          position: "top-right"
         });
 
         // New FeatureForm and set its layer to 'Incidents' FeatureLayer.
@@ -299,7 +299,7 @@ require([
           content: document.getElementById("editArea")
         });
 
-        view.ui.add(editExpand, "top-right");
+        view.ui.add(editExpand, "bottom-left");
         // input boxes for the attribute editing
         const addFeatureDiv = document.getElementById("addFeatureDiv");
         const attributeEditing = document.getElementById("featureUpdateDiv");
