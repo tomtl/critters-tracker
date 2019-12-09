@@ -2,6 +2,7 @@ require([
         "esri/Map",
         "esri/views/MapView",
         "esri/widgets/Locate",
+        "esri/widgets/BasemapGallery",
         "esri/layers/FeatureLayer",
         "esri/Graphic",
         "esri/widgets/Expand",
@@ -11,6 +12,7 @@ require([
         Map,
         MapView,
         Locate,
+        BasemapGallery,
         FeatureLayer,
         Graphic,
         Expand,
@@ -48,6 +50,37 @@ require([
         view.ui.add(locateBtn, {
           position: "top-left"
         });
+
+        // Basemap gallery
+        var basemapGallery = new BasemapGallery({
+          view: view,
+          container: document.createElement("div")
+        });
+
+        // Create an Expand instance and set the content
+        // property to the DOM node of the basemap gallery widget
+        // Use an Esri icon font to represent the content inside
+        // of the Expand widget
+
+        var bgExpand = new Expand({
+          view: view,
+          content: basemapGallery
+        });
+
+        // close the expand whenever a basemap is selected
+        basemapGallery.watch("activeBasemap", function() {
+          var mobileSize =
+            view.heightBreakpoint === "xsmall" ||
+            view.widthBreakpoint === "xsmall";
+
+          if (mobileSize) {
+            bgExpand.collapse();
+          }
+        });
+
+        // Add the expand instance to the ui
+
+        view.ui.add(bgExpand, "top-left");
 
         // New FeatureForm and set its layer to 'Incidents' FeatureLayer.
         // FeatureForm displays attributes of fields specified in fieldConfig.
