@@ -3,6 +3,7 @@ require([
         "esri/views/MapView",
         "esri/widgets/Locate",
         "esri/widgets/BasemapGallery",
+        "esri/widgets/Search",
         "esri/layers/FeatureLayer",
         "esri/Graphic",
         "esri/widgets/Expand",
@@ -13,6 +14,7 @@ require([
         MapView,
         Locate,
         BasemapGallery,
+        Search,
         FeatureLayer,
         Graphic,
         Expand,
@@ -79,8 +81,17 @@ require([
         });
 
         // Add the expand instance to the ui
-
         view.ui.add(bgExpand, "top-left");
+
+        // Search for a location
+        var searchWidget = new Search({
+          view: view
+        });
+
+        // Add the search widget to the top right corner of the view
+        view.ui.add(searchWidget, {
+          position: "bottom-left"
+        });
 
         // New FeatureForm and set its layer to 'Incidents' FeatureLayer.
         // FeatureForm displays attributes of fields specified in fieldConfig.
