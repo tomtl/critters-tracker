@@ -15,6 +15,13 @@ body,
   width: 100%;
 }
 
+#timeSlider {
+  position: absolute;
+  left: 100px;
+  right: 100px;
+  bottom: 30px;
+}
+
 .esri-item-list__scroller {
   overflow-y: visible;
 }

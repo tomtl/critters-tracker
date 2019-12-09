@@ -2,28 +2,46 @@ require([
         "esri/Map",
         "esri/views/MapView",
         "esri/layers/FeatureLayer",
+        // "esri/layers/support/TimeInfo",
         "esri/Graphic",
         "esri/widgets/Expand",
         "esri/widgets/FeatureForm",
-        "esri/widgets/FeatureTemplates"
+        "esri/widgets/FeatureTemplates",
+        "esri/widgets/TimeSlider"
       ], function(
         Map,
         MapView,
         FeatureLayer,
+        // TimeInfo,
         Graphic,
         Expand,
         FeatureForm,
-        FeatureTemplates
+        FeatureTemplates,
+        TimeSlider
       ) {
-        let editFeature, highlight;
+        let editFeature, highlight, layerView;
 
         const featureLayer = new FeatureLayer({
-          url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Critters_tracker_map/FeatureServer/0",
+          url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Critters_tracker_map_2_WFL1/FeatureServer/0",
 
           outFields: ["*"],
           popupEnabled: false,
-          id: "reportsLayer"
+          id: "reportsLayer",
+          timeInfo: {
+            startField: "time", // name of the date field
+            interval: {
+              // set time interval to one minute
+              unit: "minutes",
+              value: 1
+            }
+          }
         });
+
+        console.log("feature layer keys: ", featureLayer.keys());
+        console.log("feature layer time extent: ", featureLayer.timeExtent);
+        console.log("feature layer time info: ", featureLayer.timeInfo);
+        // console.log("feature layer time info keys: ", featureLayer.timeInfo.keys());
+        // console.log("feature layer time info extent: ", featureLayer.timeInfo.fullTimeExtent);
 
         const map = new Map({
           basemap: "topo-vector",
@@ -37,7 +55,8 @@ require([
           zoom: 15
         });
 
-        // New FeatureForm and set its layer to 'Incidents' FeatureLayer.
+        // CUSTOM EDITOR
+        // New FeatureForm and set its layer to 'Reports' FeatureLayer.
         // FeatureForm displays attributes of fields specified in fieldConfig.
         const featureForm = new FeatureForm({
           container: "formDiv",
@@ -243,7 +262,7 @@ require([
           content: document.getElementById("editArea")
         });
 
-        view.ui.add(editExpand, "top-right");
+        view.ui.add(editExpand, "top-left");
         // input boxes for the attribute editing
         const addFeatureDiv = document.getElementById("addFeatureDiv");
         const attributeEditing = document.getElementById("featureUpdateDiv");
@@ -282,4 +301,73 @@ require([
           applyEditsToIncidents(edits);
           document.getElementById("viewDiv").style.cursor = "auto";
         };
+
+        // TIME SLIDER
+        // set other properties when the layer view is loaded
+        // by default timeSlider.mode is "time-window" - shows
+        // data falls within time range
+        const timeSlider = new TimeSlider({
+          container: "timeSlider",
+          playRate: 50,
+          stops: {
+            interval: {
+              value: 1,
+              unit: "hours"
+            }
+          }
+        });
+
+        view.ui.add(timeSlider, "manual");
+
+        // wait till the layer view is loaded
+        view.whenLayerView(featureLayer).then(function(lv) {
+          console.log("featureLayer loaded");
+          layerView = lv;
+
+          // start time of the time slider - 11/25/2019
+          const start = new Date(2019, 11, 25);
+          const timeSliderEnd = new Date(2019, 12, 12);
+          // set time slider's full extent to
+          // 11/25/2019 - until end date of layer's fullTimeExtent
+          timeSlider.fullTimeExtent = {
+            start: start,
+            // end: featureLayer.timeInfo.fullTimeExtent.end
+            end: timeSliderEnd
+          };
+
+          console.log("Time slider: ", timeSlider.fullTimeExtent.keys());
+          console.log("TIME SLIDER RANGE: ", timeSlider.fullTimeExtent.start, timeSlider.fullTimeExtent.end);
+
+          // We will be showing earthquakes with one day interval
+          // when the app is loaded we will show earthquakes that
+          // happened between 11/25 - 12/3.
+          const end = new Date(start);
+          // end of current time extent for time slider
+          // showing earthquakes with 7 day interval
+          end.setDate(end.getDate() + 7);
+
+          // Values property is set so that timeslider
+          // widget show the first day. We are setting
+          // the thumbs positions.
+          timeSlider.values = [start, end];
+        });
+
+        // watch for time slider timeExtent change
+        timeSlider.watch("timeExtent", function() {
+          // only show earthquakes happened up until the end of
+          // timeSlider's current time extent.
+          featureLayer.definitionExpression =
+            "time <= " + timeSlider.timeExtent.end.getTime();
+
+          // now gray out earthquakes that happened before the time slider's current
+          // timeExtent... leaving footprint of earthquakes that already happened
+          layerView.effect = {
+            filter: {
+              timeExtent: timeSlider.timeExtent,
+              geometry: view.extent
+            },
+            excludedEffect: "grayscale(20%) opacity(12%)"
+          };
+
+        });
       });
