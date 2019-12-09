@@ -1,6 +1,7 @@
 require([
         "esri/Map",
         "esri/views/MapView",
+        "esri/widgets/Locate",
         "esri/layers/FeatureLayer",
         "esri/Graphic",
         "esri/widgets/Expand",
@@ -9,6 +10,7 @@ require([
       ], function(
         Map,
         MapView,
+        Locate,
         FeatureLayer,
         Graphic,
         Expand,
@@ -35,6 +37,16 @@ require([
           map: map,
           center: [-71.627158, 42.293983], // longitude, latitude
           zoom: 15
+        });
+
+        // create zoom to my location button
+        const locateBtn = new Locate({
+          view: view
+        });
+
+        // Add the locate widget to the top left corner of the view
+        view.ui.add(locateBtn, {
+          position: "top-left"
         });
 
         // New FeatureForm and set its layer to 'Incidents' FeatureLayer.
