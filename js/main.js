@@ -12,7 +12,6 @@ require([
         Map,
         MapView,
         FeatureLayer,
-        // TimeInfo,
         Graphic,
         Expand,
         FeatureForm,
