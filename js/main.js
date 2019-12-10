@@ -373,29 +373,11 @@ require([
       }
     });
 
-
-
-    // Add the basemap gallery expand instance to the ui
-    // view.ui.add(bgExpand, "top-right");
-
-    // Add the search widget to the top right corner of the view
-    // view.ui.add(searchWidget, {
-    //   position: "top-right"
-    // });
-
-    // Add the locate widget to the top right corner of the view under the search
-    // view.ui.add(locateBtn, {
-    //   position: "top-right"
-    // });
-
     // Add the edit form to the UI
     view.ui.add(editExpand, "top-left");
 
+    // Add widgets to top-right in a specific order
     view.ui.add([ searchWidget, locateBtn,  zoom, bgExpand, typeExpand], "top-right");
 
-    // view.ui.add(zoom, "bottom-right");
-
-    // add the critter type filter to the ui
-    // view.ui.add(typeExpand, "top-left");
   });
 });
