@@ -11,12 +11,39 @@ body,
   max-height: 350px;
 }
 
+#type-filter {
+  height: 240px;
+  width: 100%;
+  visibility: hidden;
+}
+
+.type-item {
+  width: 100%;
+  padding: 12px;
+  text-align: center;
+  vertical-align: baseline;
+  cursor: pointer;
+  height: 40px;
+}
+
+.type-item:focus {
+  background-color: dimgrey;
+}
+
+.type-item:hover {
+  background-color: dimgrey;
+}
+
 #formDiv {
   width: 100%;
 }
 
 .esri-item-list__scroller {
   overflow-y: visible;
+}
+
+.esri-item-list__list-item-label {
+  line-height: 1em;
 }
 
 .editArea-container {
