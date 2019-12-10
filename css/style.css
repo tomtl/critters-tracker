@@ -12,7 +12,7 @@ body,
 }
 
 #type-filter {
-  height: 160px;
+  height: 240px;
   width: 100%;
   visibility: hidden;
 }
@@ -40,6 +40,10 @@ body,
 
 .esri-item-list__scroller {
   overflow-y: visible;
+}
+
+.esri-item-list__list-item-label {
+  line-height: 1em;
 }
 
 .editArea-container {
